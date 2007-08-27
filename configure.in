@@ -10,7 +10,7 @@ dnl ########################################################################
 
 AC_INIT(check_snmp_disk.c)
 
-VER=1.0
+VER=1.1
 REL=1
 AC_SUBST(VER)
 AC_SUBST(REL)
