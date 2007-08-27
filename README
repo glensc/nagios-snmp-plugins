@@ -31,8 +31,35 @@ Distributed under GNU GENERAL PUBLIC LICENSE v2
 (See file COPYING in the distribution).
 
 
-What can they do?
------------------
+Acknowlegdements & Thanks
+-------------------------
+
+Elan Ruusamäe <glen at pld-linux.org>
+   - enhanced reporting for the check_snmp_proc plugin. Also
+     the only patch I ever got from a distribution vendor. :-)
+
+Jose Pedro Oliveira <jpo at di.uminho.pt> 
+
+   - for maintaining the Fedora Extras RPM; I rolled a number of
+   things from that spec file back into the "official" one.
+
+Oliver Faenger <oliver.faenger atcityweb.de>
+   - representing many many people who reported and sent me patches
+     for the gcc4 compilation issue. 
+
+
+
+All the Linux distributions who included that little hack into their
+package lists. BTW: I'd appreciate if you drop me a quick line when
+you include nagios-snmp-plugins into a distribution. So far I know of:
+
+- Fedora 7
+- Fedora Extras 
+- PLD Linux
+
+
+What can these plugins do?
+--------------------------
 
 NET-SNMP gives you an unique feature: It makes checks for running
 processes and/or disk size configurable in the SNMP daemon and
@@ -55,8 +82,8 @@ need to check what disks are there, then query error status.
 These two plugins does all the work for you.
 
 
-Where do they run?
-------------------
+Where do the plugins run?
+-------------------------
 
 Well, on Linux. :-) That's where I wrote them. They should compile on
 any other *x like Operating system, too. If you get them to compile,
@@ -66,9 +93,21 @@ I compiled and tested these plugins on
 
 RedHat Linux 9
 Fedora Core 1
+Fedora Core 3
+Fedora Core 4
+Fedora Core 5
+Fedora Core 6
 RedHat Enterprise Linux 3
+RedHat Enterprise Linux 4
+RedHat Enterprise Linux 5
+CentOS 5
 
-using Nagios 1.2
+using various nagios versions between 1.2 and 2.9.
+
+Users reported success on various SuSE Linux and SLES
+versions. Compilation on *BSD seems to be possible if you have a GNU
+getline library.
+
 
 How do I build and install?
 ---------------------------
@@ -125,13 +164,13 @@ define command	{
   $USER3$, adjust the definition above.
 
 
-How do I use it?
-----------------
+How do I use the plugins?
+-------------------------
 
 First, select something to check. You find a detailed description in
 man snmpd.conf(5).
 
-I, e.g. use (in /etc/snmpd/snmpd.local.conf under RedHat):
+I, e.g. use (in /etc/snmpd/snmpd.local.conf under RedHat/Fedora):
 
 #
 # SNMP checked disks
