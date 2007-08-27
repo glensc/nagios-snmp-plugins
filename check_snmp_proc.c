@@ -2,10 +2,10 @@
  *
  * plugins for Netsaint
  *
- * (C) 2002-2004
+ * (C) 2002-2007
  *   Henning P. Schmiedehausen
  *   INTERMETA - Gesellschaft fuer Mehrwertdienste mbH
- *   Am Schwabachgrund 22
+ *   Hutweide 15
  *   D-91054 Buckenhof
  *
  *************************************************************************
@@ -127,6 +127,92 @@ int main (int argc, char *argv[])
   exit(ret);
 }
 
+void format_report(int cnt, long *errors, char **errormsg)
+{
+  int i;
+  size_t nmany = 0, nfew = 0, nunkn = 0;
+  char **errmany = NULL, **errfew = NULL, **errunkn = NULL;
+  char **pmany = NULL, **pfew = NULL, **punkn = NULL;
+
+  errmany = calloc(sizeof(char **), cnt);
+  if (!errmany) {
+    printf("%s: Could not allocate memory for error information\n", bn);
+    return;
+  }
+  errfew = calloc(sizeof(char **), cnt);
+  if (!errfew) {
+    printf("%s: Could not allocate memory for error information\n", bn);
+    return;
+  }
+  errunkn = calloc(sizeof(char **), cnt);
+  if (!errunkn) {
+    printf("%s: Could not allocate memory for error information\n", bn);
+    return;
+  }
+
+#define _msg_few "Too few "
+#define _msg_many "Too many "
+  pmany = errmany; pfew = errfew; punkn = errunkn;
+  for (i = 0; i < cnt; i++) {
+    if (errors[i]) {
+      size_t len = strlen(errormsg[i]);
+      if (strncmp(errormsg[i], _msg_many, sizeof(_msg_many) - 1) == 0) {
+        *(pmany++) = errormsg[i] + sizeof(_msg_many) - 1;
+        nmany++;
+
+      } else if (strncmp(errormsg[i], _msg_few, sizeof(_msg_few) - 1) == 0) {
+        *(pfew++) = errormsg[i] + sizeof(_msg_few) - 1;
+        nfew++;
+
+      } else {
+        *(punkn++) = errormsg[i];
+        nunkn++;
+      }
+    }
+  }
+
+  if (verbose) {
+    printf("%s: Got %ld few, %ld many, %ld unknown messages\n", bn, nfew, nmany, nunkn);
+  }
+
+#define _msg_running " running"
+  if (nmany) {
+    char *p;
+    printf("%s", _msg_many);
+    for (i = 0; i < nmany- 1; i++) {
+      p = strstr(errmany[i], _msg_running);
+      printf("%.*s%s, ", p - errmany[i], errmany[i], p + sizeof(_msg_running) - 1);
+    }
+    p = strstr(errmany[i], _msg_running);
+    printf("%.*s%s", p - errmany[i], errmany[i], p + sizeof(_msg_running) - 1);
+    printf("%s", _msg_running);
+  }
+  if (nfew) {
+    char *p;
+    if (nmany) {
+      printf(". ");
+    }
+    printf("%s", _msg_few);
+    for (i = 0; i < nfew - 1; i++) {
+      p = strstr(errfew[i], _msg_running);
+      printf("%.*s%s, ", p - errfew[i], errfew[i], p + sizeof(_msg_running) - 1);
+    }
+    p = strstr(errfew[i], _msg_running);
+    printf("%.*s%s", p - errfew[i], errfew[i], p + sizeof(_msg_running) - 1);
+    printf("%s", _msg_running);
+  }
+  if (nunkn) {
+    if (nfew) {
+      printf(". ");
+    }
+    for (i = 0; i < nunkn - 1; i++) {
+      printf("%s", errunkn[i]);
+    }
+    printf("%s", errunkn[i]);
+  }
+  printf("\n");
+}
+
 int report_proc()
 {
   int cnt;
@@ -195,12 +281,8 @@ int report_proc()
     printf("%s: Could not fetch error messages\n", bn);
     return STATE_CRITICAL;
   }
-  
-  for(i=0; i < cnt; i++)
-  {
-    if(errors[i])
-      printf("%s\n", errormsg[i]);
-  }
+
+  format_report(cnt, errors, errormsg);
 
   return STATE_CRITICAL;
 }

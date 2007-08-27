@@ -2,10 +2,10 @@
  *
  * plugins for Netsaint
  *
- * (C) 2002-2004
+ * (C) 2002-2007
  *   Henning P. Schmiedehausen
  *   INTERMETA - Gesellschaft fuer Mehrwertdienste mbH
- *   Am Schwabachgrund 22
+ *   Hutweide 15
  *   D-91054 Buckenhof
  *
  *************************************************************************
@@ -229,12 +229,14 @@ void null_callback(struct variable_list *vars, void **pnt)
 
 void integer_callback(struct variable_list *vars, void **pnt)
 {
-  long *data = ((long *)(*pnt))++;
+  long *data = (long *)(*pnt);
 
   if(verbose)
     printf("%s: Found Integer Value %ld into %lx\n", bn, *vars->val.integer, data);
 
   *data = *vars->val.integer;
+
+  *pnt = ++data;
 }
 
 /**
@@ -245,7 +247,7 @@ void integer_callback(struct variable_list *vars, void **pnt)
 
 void string_callback(struct variable_list *vars, void **pnt)
 {
-  char **data = ((char **)(*pnt))++;
+  char **data = (char **)(*pnt);
   
   if(verbose)
     printf("%s: Putting String into %lx\n", bn, data);
@@ -258,5 +260,7 @@ void string_callback(struct variable_list *vars, void **pnt)
   {
     *data = "";
   }
+
+  *pnt = ++data;
 }
 

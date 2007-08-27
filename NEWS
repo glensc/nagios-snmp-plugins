@@ -1,2 +1,9 @@
-New in 1.0
+Version 1.1 
+* Fixed annoying compile problem with distributions post-Fedora Core 1
+
+Version 1.0 - Released 2004-03-29
+* Renamed to nagios-snmp-plugins
 * Added autoconf support
+
+Version 0.1 - Released 2002-01-27
+

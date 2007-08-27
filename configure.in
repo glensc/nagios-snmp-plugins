@@ -1,16 +1,16 @@
 dnl ########################################################################
 dnl #
-dnl #  (C) 2002-2004
+dnl #  (C) 2002-2007
 dnl #    Henning P. Schmiedehausen
 dnl #    INTERMETA - Gesellschaft fuer Mehrwertdienste mbH
-dnl #    Am Schwabachgrund 22
+dnl #    Hutweide 15
 dnl #    D-91054 Buckenhof
 dnl # 
 dnl ########################################################################
 
 AC_INIT(check_snmp_disk.c)
 
-VER=1.0
+VER=1.1
 REL=1
 AC_SUBST(VER)
 AC_SUBST(REL)
