@@ -116,14 +116,18 @@ How do I build and install?
 
 - Run
 
-aclocal
-autoheader
-automake --add-missing
-autoconf
-./configure
-make
+    aclocal
+    autoheader
+    automake --add-missing
+    autoconf
+    ./configure
+    make
 
-- you should now have two binaries:  check_snmp_disk and check_snmp_plug
+  or simply
+
+    ./build.sh
+
+- you should now have two binaries:  check_snmp_disk and check_snmp_proc
 
 - copy them into your Nagios plugins directory.
 
