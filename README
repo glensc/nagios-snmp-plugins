@@ -31,6 +31,17 @@ Distributed under GNU GENERAL PUBLIC LICENSE v2
 (See file COPYING in the distribution).
 
 
+Where to get it?
+----------------
+
+Homepage: http://henning.schmiedehausen.org/eyewiki/Wiki.jsp?page=NagiosSnmpPlugins
+
+Release downloads: http://www.softwareforge.de/releases/nagios-snmp-plugins/
+
+SVN Browser: https://svn.softwareforge.de/trac/browser/nagios-snmp-plugins/trunk
+Anon SVN:    http://svn.softwareforge.de/svn/opensource/nagios-snmp-plugins/trunk
+
+
 Acknowlegdements & Thanks
 -------------------------
 
