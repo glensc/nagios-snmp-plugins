@@ -2,10 +2,10 @@
  *
  * plugins for Netsaint
  *
- * (C) 2002-2004
+ * (C) 2002-2007
  *   Henning P. Schmiedehausen
  *   INTERMETA - Gesellschaft fuer Mehrwertdienste mbH
- *   Am Schwabachgrund 22
+ *   Hutweide 15
  *   D-91054 Buckenhof
  *
  *************************************************************************
