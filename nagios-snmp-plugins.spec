@@ -5,7 +5,7 @@ Summary: 	Plugins for Nagios to monitor remote disk and processes via SNMP
 Version:	1.1
 Release:	1.%{?dist}.im
 Source: 	http://www.softwareforge.de/releases/nagios-snmp-plugins/nagios-snmp-plugins-%{version}.tar.gz
-Copyright: 	GPLv2
+License: 	GPLv2
 BuildRoot: 	%{_tmppath}/%{name}-root
 Group: 		Applications/System
 Packager: 	Henning P. Schmiedehausen <henning@intermeta.de>
