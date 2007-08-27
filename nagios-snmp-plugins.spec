@@ -1,9 +1,10 @@
+
 %define nagios_plugins_dir %{_libdir}/nagios/plugins
 
 Name: 		nagios-snmp-plugins
 Summary: 	Plugins for Nagios to monitor remote disk and processes via SNMP
 Version:	1.1
-Release:	1.%{?dist}.im
+Release:	1%{?dist}.im
 Source: 	http://www.softwareforge.de/releases/nagios-snmp-plugins/nagios-snmp-plugins-%{version}.tar.gz
 License: 	GPLv2
 BuildRoot: 	%{_tmppath}/%{name}-root
@@ -15,7 +16,6 @@ Vendor: 	INTERMETA - Gesellschaft fuer Mehrwertdienste mbH
 BuildRequires:  autoconf, automake
 BuildRequires:  net-snmp-devel
 BuildRequires:  openssl-devel
-BuildRequires:  tcp_wrappers-devel
 Requires:       nagios-plugins
 
 %description
@@ -26,13 +26,7 @@ a remote machine via SNMP.
 %setup -q
 
 %build
-aclocal
-autoheader
-automake --add-missing
-autoconf
-%configure
-
-make %{?_smp_mflags}
+./build.sh
 
 %install
 rm -rf %{buildroot}
