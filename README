@@ -1,0 +1,231 @@
+
+			 Nagios SNMP Plugins
+			 ===================
+
+What is it?
+-----------
+
+These are two plugins to be used with Nagios. They should still work
+with NetSaint, but as this is now really ancient, I don't support
+Netsaint any longer. You also need the Net SNMP Daemon in a reasonable
+new version.
+
+Nagios:   	http://www.nagios.org/
+Net-SNMPD: 	http://www.net-snmp.org/
+
+
+Who wrote it?
+-------------
+
+These programs are (C) 2002-2004 by
+
+Henning P. Schmiedehausen
+INTERMETA - Gesellschaft fuer Mehrwertdienste mbH
+Am Schwabachgrund 22
+D-91054 Buckenhof
+
+Mail:  hps@intermeta.de
+Web:   http://www.intermeta.de/
+
+Distributed under GNU GENERAL PUBLIC LICENSE v2 
+(See file COPYING in the distribution).
+
+
+What can they do?
+-----------------
+
+NET-SNMP gives you an unique feature: It makes checks for running
+processes and/or disk size configurable in the SNMP daemon and
+queryable via SNMP. So you can do
+
+proc  syslogd
+proc  klogd
+
+disk  /    5%
+disk  /usr 10%
+
+
+in your snmpd.local.conf and have the snmp daemon check that you
+always have free space on your root and usr file system and that you
+have syslogd and klogd processes running.
+
+Querying this from a monitoring tool however, is very cumbersome. You
+need to check what disks are there, then query error status.
+
+These two plugins does all the work for you.
+
+
+Where do they run?
+------------------
+
+Well, on Linux. :-) That's where I wrote them. They should compile on
+any other *x like Operating system, too. If you get them to compile,
+please let me know.
+
+I compiled and tested these plugins on
+
+RedHat Linux 9
+Fedora Core 1
+RedHat Enterprise Linux 3
+
+using Nagios 1.2
+
+How do I build and install?
+---------------------------
+
+- Unpack the distribution.
+
+- Run
+
+aclocal
+autoheader
+automake --add-missing
+autoconf
+./configure
+make
+
+- you should now have two binaries:  check_snmp_disk and check_snmp_plug
+
+- copy them into your Nagios plugins directory.
+
+
+How do I configure the plugins?
+-------------------------------
+
+Using Nagios there are two ways to configure the plugins:
+
+The old way:
+
+- add the following two lines to your /etc/nagios/command.cfg:
+
+command[check_snmp_disk]=/usr/lib/nagios/plugins/check_snmp_disk -H $HOSTADDRESS$ -C $ARG1$
+command[check_snmp_proc]=/usr/lib/nagios/plugins/check_snmp_proc -H $HOSTADDRESS$ -C $ARG1$
+
+  Replace /usr/lib/nagios/plugins/ with the directory where you copied
+  the binaries!
+
+The new way:
+
+- add the following lines to your /etc/nagios/checkcommands.cfg
+
+# 'check_snmp_disk' command definition
+define command	{
+	command_name	check_snmp_disk
+	command_line	$USER1$/check_snmp_disk -H $ARG1$ -C $USER3$
+}
+
+
+# 'check_snmp_proc' command definition
+define command	{
+	command_name	check_snmp_proc
+	command_line	$USER1$/check_snmp_proc -H $ARG1$ -C $USER3$
+}
+
+- The Community password should be defined in your resources.cfg If you don't use
+  $USER3$, adjust the definition above.
+
+
+How do I use it?
+----------------
+
+First, select something to check. You find a detailed description in
+man snmpd.conf(5).
+
+I, e.g. use (in /etc/snmpd/snmpd.local.conf under RedHat):
+
+#
+# SNMP checked disks
+#
+disk	/		5%
+disk	/usr		5%
+disk	/var		10%
+disk	/boot		1%
+disk	/mnt/disk0	10%
+#
+# SNMP checked Processes
+#
+proc	crond
+proc	ntpd
+proc	sshd
+proc	syslogd
+proc	klogd
+
+Which assures that all my disks do not fill up and that I have the
+most important processes running on my boxes.
+
+You need a configured snmpd with at least a read community configured.
+
+Now try your configuration: Run the disk plugin manually:
+
+check_snmp_disk -H <host to check> -C <community>
+
+It should report either
+
+"Checked <xxx> disks."  and a return code of 0 if everything is fine
+(<xxx> should be the number of disks configured in the snmp.local.conf
+file),
+
+or
+
+"<diskname>: less than <xxx>% free (= <yyy>%) (<devicename>)" and a
+return code of 2 if there is a problem (diskname and devicename depend
+on the disk, <xxx> is the threshold configured and <yyy> is the actual
+free space).
+
+
+The same testing can be done with the check_snmp_proc plugin.
+
+Now configure your monitor program to monitor a host (in hosts.cfg):
+
+The old way:
+
+service[myhost]=DISK;0;24x7;3;5;1;admins;120;24x7;1;1;0;;check_snmp_disk!<community>
+service[myhost]=PROC;0;24x7;3;5;1;admins;120;24x7;1;1;0;;check_snmp_proc!<community>
+
+where <community is your read-community from above) and you're
+set. The ";0;24x7;3;5;1;admins;120;24x7;1;1;0;;" parameters should be
+of course your very own configuration. :-)
+
+The new way:
+
+# Service definition
+define service	{
+	use				generic-service
+
+	host_name			myhost
+	service_description		Disk Space
+	check_command			check_snmp_disk!myhost
+}
+
+# Service definition
+define service	{
+	use				generic-service
+
+	host_name			myhost
+	service_description		Running processes
+	check_command			check_snmp_proc!myhost
+}
+
+Of course you should replace "myhost" with your host. 
+
+
+What is left to do?
+-------------------
+
+- Hard/Soft Thresholds 
+
+- If multiple failures occur, only the first is reported
+  (Nagios restriction) and every further error only when the
+  first is fixed.
+
+
+Release History
+---------------
+
+2002-01-27:          Version 0.1 released
+                     First public version 0.2 finished
+
+2004-03-29:          Renamed to nagios-plugins
+                     Added autoconf code
+                     Bumped to 1.0
+
