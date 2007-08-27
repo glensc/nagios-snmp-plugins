@@ -222,10 +222,4 @@ What is left to do?
 Release History
 ---------------
 
-2002-01-27:          Version 0.1 released
-                     First public version 0.2 finished
-
-2004-03-29:          Renamed to nagios-plugins
-                     Added autoconf code
-                     Bumped to 1.0
-
+see NEWS FILE
