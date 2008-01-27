@@ -1,3 +1,8 @@
+Version 1.2 - not yet released
+
+* Added patch to display disks and processes, 
+  contributed by Mark Janssen
+
 Version 1.1 - Released 2007-08-27
 * Fixed annoying compile problem with distributions post-Fedora Core 1
 * Add check_snmp_proc formatting contributed by Elan Ruusamäe

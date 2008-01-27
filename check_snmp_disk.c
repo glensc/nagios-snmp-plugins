@@ -49,6 +49,7 @@ int main (int argc, char *argv[])
     { "community", required_argument, 0, 'C' },
     { "hostname",  required_argument, 0, 'H' },
     { "verbose",   no_argument,       0, 'v' },
+    { "list",      no_argument,       0, 'l' },
     { 0, 0, 0, 0 },
   };
   int option_index = 0;
@@ -59,7 +60,7 @@ int main (int argc, char *argv[])
   bn = strdup(basename(argv[0]));
   version = VERSION;
 
-#define OPTS "?hVvt:c:w:C:H:"
+#define OPTS "?hVvlt:c:w:C:H:"
   
   while(1)
   {
@@ -113,6 +114,12 @@ int main (int argc, char *argv[])
       case 'v':
         verbose = 1;
         printf("%s: Verbose mode activated\n", bn);
+        break;
+
+      case 'l':
+        listing = 1;
+		if(verbose)
+        	printf("%s: List mode activated\n", bn);
         break;
     }
   }
@@ -182,12 +189,6 @@ int report_disk()
     }
   }
 
-  if(gotErrors == 0)
-  {
-    printf("Checked %d disks.\n", cnt);
-    return STATE_OK;
-  }
-  
   errormsg = calloc(sizeof(char **), cnt);
   diskname = calloc(sizeof(char **), cnt);
   if(!errormsg || !diskname)
@@ -218,6 +219,22 @@ int report_disk()
       printf("%s (%s)\n", errormsg[i], diskname[i]);
   }
 
+  if(gotErrors == 0)
+  {
+	if(listing)
+	{
+		printf( "Checked %d disks. ( ", cnt );
+		for(i=0; i < cnt; i++)
+		{
+			printf( "%s ", diskname[i] );
+		}
+		printf(")\n" );
+	}
+	else
+    	printf("Checked %d disks.\n", cnt);
+    return STATE_OK;
+  }
+  
   return STATE_CRITICAL;
 }
 

@@ -44,6 +44,7 @@ int main (int argc, char *argv[])
     { "community", required_argument, 0, 'C' },
     { "hostname",  required_argument, 0, 'H' },
     { "verbose",   no_argument,       0, 'v' },
+    { "list",      no_argument,       0, 'l' },
     { 0, 0, 0, 0 },
   };
   int option_index = 0;
@@ -54,7 +55,7 @@ int main (int argc, char *argv[])
   bn = strdup(basename(argv[0]));
   version = VERSION;
 
-#define OPTS "?hVvt:c:w:C:H:"
+#define OPTS "?hVvlt:c:w:C:H:"
   
   while(1)
   {
@@ -108,6 +109,12 @@ int main (int argc, char *argv[])
       case 'v':
         verbose = 1;
         printf("%s: Verbose mode activated\n", bn);
+        break;
+
+      case 'l':
+        listing = 1;
+		if(verbose)
+			printf("%s: List mode activated\n", bn);
         break;
     }
   }
@@ -222,6 +229,7 @@ int report_proc()
   int i;
   int gotErrors = 0;
   char **errormsg = NULL;
+  char **procname = NULL;
   
   if((cnt = fetch_table(PROC_INDEX_MIB, null_callback, NULL, 0)) < 0)
   {
@@ -240,6 +248,8 @@ int report_proc()
     printf("%s: Could not allocate memory for information\n", bn);
     return STATE_CRITICAL;
   }
+
+  procname = calloc(sizeof(char **), cnt);
 
   pnt = errors;
   if(fetch_table(PROC_ERRORFLAG_MIB, integer_callback, pnt, cnt) < 0)
@@ -260,12 +270,28 @@ int report_proc()
     }
   }
 
+	pnt = procname;
+	if(fetch_table(PROC_NAME_MIB, string_callback, pnt, cnt) < 0)
+	{
+		printf("%s: Could not fetch process list\n", bn);
+		return STATE_CRITICAL;
+	}
+
   if(gotErrors == 0)
   {
-    printf("Checked %d process groups.\n", cnt);
+	if(listing)
+	{
+		printf("Checked %d process groups. ( ", cnt);
+		for(i=0; i < cnt; i++)
+		{
+			printf( "%s ", procname[i] );
+		}
+		printf( ")\n");
+	}
+	else
+    	printf("Checked %d process groups.\n", cnt);
     return STATE_OK;
   }
-  
 
   errormsg = calloc(sizeof(char **), cnt);
   if(!errormsg)
@@ -286,6 +312,3 @@ int report_proc()
 
   return STATE_CRITICAL;
 }
-
-
-

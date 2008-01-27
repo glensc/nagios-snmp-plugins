@@ -3,7 +3,7 @@
 
 Name: 		nagios-snmp-plugins
 Summary: 	Plugins for Nagios to monitor remote disk and processes via SNMP
-Version:	1.1
+Version:	1.2
 Release:	1%{?dist}.im
 Source: 	http://www.softwareforge.de/releases/nagios-snmp-plugins/nagios-snmp-plugins-%{version}.tar.gz
 License: 	GPLv2
@@ -48,6 +48,9 @@ rm -rf %{buildroot}
 %attr(755,root,root) %{nagios_plugins_dir}/check_snmp_proc
 
 %changelog
+* Sun Jan 27 2008 Henning P. Schmiedehausen <hps@intermeta.de> - 1.2-1.im
+- Release 1.2
+
 * Mon Aug 27 2007 Henning P. Schmiedehausen <hps@intermeta.de> - 1.1-1.im
 - Update Spec file for newer distributions
 - explicit GPLv2

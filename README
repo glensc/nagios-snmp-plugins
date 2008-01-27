@@ -54,9 +54,12 @@ Jose Pedro Oliveira <jpo at di.uminho.pt>
    - for maintaining the Fedora Extras RPM; I rolled a number of
    things from that spec file back into the "official" one.
 
-Oliver Faenger <oliver.faenger atcityweb.de>
+Oliver Faenger <oliver.faenger at cityweb.de>
    - representing many many people who reported and sent me patches
      for the gcc4 compilation issue. 
+
+Mark Janssen <maniac at maniac.nl>
+   - patch that displays the checked devices and processes
 
 
 
