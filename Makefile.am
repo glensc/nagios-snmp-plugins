@@ -1,6 +1,6 @@
 ########################################################################
 #
-#  (C) 2002-2007
+#  (C) 2002-2008
 #    Henning P. Schmiedehausen
 #    INTERMETA - Gesellschaft fuer Mehrwertdienste mbH
 #    Hutweide 15
