@@ -223,12 +223,12 @@ int report_disk()
   {
 	if(listing)
 	{
-		printf( "Checked %d disks. ( ", cnt );
-		for(i=0; i < cnt; i++)
+		printf( "Checked %d disks (%s", cnt, diskname[0]);
+		for(i=1; i < cnt; i++)
 		{
-			printf( "%s ", diskname[i] );
+			printf( ", %s", diskname[i] );
 		}
-		printf(")\n" );
+		printf(").\n" );
 	}
 	else
     	printf("Checked %d disks.\n", cnt);

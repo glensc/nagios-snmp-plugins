@@ -281,12 +281,12 @@ int report_proc()
   {
 	if(listing)
 	{
-		printf("Checked %d process groups. ( ", cnt);
-		for(i=0; i < cnt; i++)
+		printf("Checked %d process groups (%s", cnt, procname[0]);
+		for(i=1; i < cnt; i++)
 		{
-			printf( "%s ", procname[i] );
+			printf( ", %s", procname[i] );
 		}
-		printf( ")\n");
+		printf( ").\n");
 	}
 	else
     	printf("Checked %d process groups.\n", cnt);
