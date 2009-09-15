@@ -34,171 +34,158 @@ static int report_load(void);
 
 int main (int argc, char *argv[])
 {
-  static struct option long_options[] = {
-    { "help",      no_argument,       0, 'h' },
-    { "version",   no_argument,       0, 'V' },
-    { "timeout",   required_argument, 0, 't' },
-    { "community", required_argument, 0, 'C' },
-    { "hostname",  required_argument, 0, 'H' },
-    { "verbose",   no_argument,       0, 'v' },
-    { 0, 0, 0, 0 },
-  };
-  int option_index = 0;
-  int c;
+	static struct option long_options[] = {
+		{ "help",      no_argument,       0, 'h' },
+		{ "version",   no_argument,       0, 'V' },
+		{ "timeout",   required_argument, 0, 't' },
+		{ "community", required_argument, 0, 'C' },
+		{ "hostname",  required_argument, 0, 'H' },
+		{ "verbose",   no_argument,       0, 'v' },
+		{ 0, 0, 0, 0 },
+	};
+	int option_index = 0;
+	int c;
 
-  int ret = STATE_UNKNOWN;
+	int ret = STATE_UNKNOWN;
 
-  bn = strdup(basename(argv[0]));
-  version = VERSION;
+	bn = strdup(basename(argv[0]));
+	version = VERSION;
 
 #define OPTS "?hVvt:c:w:C:H:"
-  
-  while(1)
-  {
-    c = getopt_long(argc, argv, OPTS, long_options, &option_index);
 
-    if(c == -1 || c == EOF)
-      break;
+	while(1) {
+		c = getopt_long(argc, argv, OPTS, long_options, &option_index);
 
-    switch(c)
-    {
-      case '?':
-      case 'h':
-        print_help();
-        exit(STATE_UNKNOWN);
+		if (c == -1 || c == EOF) {
+			break;
+		}
 
-      case 'V':
-        print_version();
-        exit(STATE_UNKNOWN);
+		switch(c) {
+			case '?':
+			case 'h':
+				print_help();
+				exit(STATE_UNKNOWN);
 
+			case 'V':
+				print_version();
+				exit(STATE_UNKNOWN);
 
-      case 't':
-        if(!is_integer(optarg))
-        {
-          printf("%s: Timeout interval (%s)must be integer!\n",
-                 bn,
-                 optarg);
-          exit(STATE_UNKNOWN);
-        }
-        
-        timeout = atoi(optarg);
-        if(verbose)
-          printf("%s: Timeout set to %d\n", bn, timeout);
-        break;
+			case 't':
+				if (!is_integer(optarg)) {
+					printf("%s: Timeout interval (%s)must be integer!\n",
+								 bn,
+								 optarg);
+					exit(STATE_UNKNOWN);
+				}
 
-      case 'C':
-        community = strdup(optarg);
+				timeout = atoi(optarg);
+				if (verbose) {
+					printf("%s: Timeout set to %d\n", bn, timeout);
+				}
+				break;
 
-        if(verbose)
-          printf("%s: Community set to %s\n", bn, community);
-        
-        break;
+			case 'C':
+				community = strdup(optarg);
 
-      case 'H':
-        hostname = strdup(optarg);
+				if (verbose) {
+					printf("%s: Community set to %s\n", bn, community);
+				}
 
-        if(verbose)
-          printf("%s: Hostname set to %s\n", bn, hostname);
+				break;
 
-        break;
+			case 'H':
+				hostname = strdup(optarg);
 
-      case 'v':
-        verbose = 1;
-        printf("%s: Verbose mode activated\n", bn);
-        break;
-    }
-  }
+				if (verbose) {
+					printf("%s: Hostname set to %s\n", bn, hostname);
+				}
 
-  if(!hostname || !community)
-  {
-    printf("%s: Hostname or Community missing!\n", bn);
-    print_help();
-    exit(STATE_UNKNOWN);
-  }
+				break;
 
-  ret = report_load();
+			case 'v':
+				verbose = 1;
+				printf("%s: Verbose mode activated\n", bn);
+				break;
+		}
+	}
 
-  if(verbose)
-    printf("%s: Returning %d\n", bn, ret);
+	if (!hostname || !community) {
+		printf("%s: Hostname or Community missing!\n", bn);
+		print_help();
+		exit(STATE_UNKNOWN);
+	}
 
-  exit(ret);
+	ret = report_load();
+
+	if (verbose) {
+		printf("%s: Returning %d\n", bn, ret);
+	}
+
+	exit(ret);
 }
 
-static int report_load()
-{
-  int cnt;
+static int report_load() {
+	int cnt;
+	long *errors;
+	void *pnt;
+	int i, j;
+	int nerrors = 0;
+	char **errormsg = NULL;
 
-  long *errors;
-  void *pnt;
-  int i;
-  int gotErrors = 0;
-  char **errormsg = NULL;
+	if ((cnt = fetch_table(LOAD_INDEX_MIB, null_callback, NULL, 0)) < 0) {
+		printf("%s: Could not fetch mem index\n", bn);
+		return STATE_UNKNOWN;
+	}
 
-  
-  if((cnt = fetch_table(LOAD_INDEX_MIB, null_callback, NULL, 0)) < 0)
-  {
-    printf("%s: Could not fetch mem index\n", bn);
-    return STATE_UNKNOWN;
-  }
+	if (!cnt) {
+		printf("%s: Not configured.\n", bn);
+		return STATE_WARNING;
+	}
 
-  if(!cnt)  // not configured
-  {
-    printf("%s: Not configure.\n", bn);
-    return STATE_WARNING;
-  }
-  
+	if (!(errors = calloc(sizeof(long), cnt))) {
+		printf("%s: Could not allocate memory for information\n", bn);
+		return STATE_CRITICAL;
+	}
 
-  if(!(errors  = calloc(sizeof(long), cnt)))
-  {
-    printf("%s: Could not allocate memory for information\n", bn);
-    return STATE_CRITICAL;
-  }
+	pnt = errors;
+	if (fetch_table(LOAD_ERRORFLAG_MIB, integer_callback, pnt, cnt) < 0) {
+		printf("%s: Could not fetch error list!\n", bn);
+		return STATE_UNKNOWN;
+	}
 
-  pnt = errors;
-  if(fetch_table(LOAD_ERRORFLAG_MIB, integer_callback, pnt, cnt) < 0)
-  {
-    printf("%s: Could not fetch error list!\n", bn);
-    return STATE_UNKNOWN;
-  }
+	for (i = 0; i < cnt; i++) {
+		if (verbose) {
+			printf("%s: Got Flag %ld for %d\n", bn, errors[i], i);
+		}
 
-  for(i=0; i<cnt; i++)
-  {
-    if(verbose)
-      printf("%s: Got Flag %ld for %d\n", bn, errors[i], i);
+		if (errors[i]) {
+			nerrors++;
+		}
+	}
 
-    if(errors[i])
-    {
-      gotErrors = 1;
-      break;
-    }
-  }
+	if (nerrors == 0) {
+		printf("Checked load for %d entries.\n", cnt);
+		return STATE_OK;
+	}
 
-  errormsg = calloc(sizeof(char **), cnt);
-  if(!errormsg)
-  {
-    printf("%s: Could not allocate memory for error information\n", bn);
-    return STATE_CRITICAL;
-  }
+	errormsg = calloc(sizeof(char **), cnt);
+	if (!errormsg) {
+		printf("%s: Could not allocate memory for error information\n", bn);
+		return STATE_CRITICAL;
+	}
 
-  pnt = errormsg;
+	pnt = errormsg;
+	if (fetch_table(LOAD_ERRORMSG_MIB, string_callback, pnt, cnt) < 0) {
+		printf("%s: Could not fetch error messages\n", bn);
+		return STATE_CRITICAL;
+	}
 
-  if(fetch_table(LOAD_ERRORMSG_MIB, string_callback, pnt, cnt) < 0)
-  {
-    printf("%s: Could not fetch error messages\n", bn);
-    return STATE_CRITICAL;
-  }
+	for (j = i = 0; i < cnt; i++) {
+		if (errors[i]) {
+			printf("%s%s", errormsg[i], j == nerrors - 1 ? "\n" : ", ");
+			j++;
+		}
+	}
 
-  for(i=0; i < cnt; i++)
-  {
-    if(errors[i])
-      printf("%s%s", errormsg[i], i == cnt - 1 ? "\n" : ", ");
-  }
-
-  if(gotErrors == 0)
-  {
-	printf("Checked load for %d entries.\n", cnt);
-    return STATE_OK;
-  }
-  
-  return STATE_CRITICAL;
+	return STATE_CRITICAL;
 }
