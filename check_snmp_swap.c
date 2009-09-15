@@ -41,7 +41,6 @@ int main (int argc, char *argv[])
     { "community", required_argument, 0, 'C' },
     { "hostname",  required_argument, 0, 'H' },
     { "verbose",   no_argument,       0, 'v' },
-    { "list",      no_argument,       0, 'l' },
     { 0, 0, 0, 0 },
   };
   int option_index = 0;
@@ -52,7 +51,7 @@ int main (int argc, char *argv[])
   bn = strdup(basename(argv[0]));
   version = VERSION;
 
-#define OPTS "?hVvlt:c:w:C:H:"
+#define OPTS "?hVvt:c:w:C:H:"
   
   while(1)
   {
