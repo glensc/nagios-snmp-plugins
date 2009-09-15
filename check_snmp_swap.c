@@ -107,12 +107,6 @@ int main (int argc, char *argv[])
         verbose = 1;
         printf("%s: Verbose mode activated\n", bn);
         break;
-
-      case 'l':
-        listing = 1;
-		if(verbose)
-        	printf("%s: List mode activated\n", bn);
-        break;
     }
   }
 
