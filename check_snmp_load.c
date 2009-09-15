@@ -27,6 +27,8 @@
 #define RCS_VERSION "$Revision: 1.6 $ ($Date: 2002/01/27 22:10:24 $)"
 
 #define LOAD_INDEX_MIB       ".1.3.6.1.4.1.2021.10.1.1"
+#define LOAD_LOADAVG_MIB     ".1.3.6.1.4.1.2021.10.1.3"
+#define LOAD_CONFIG_MIB      ".1.3.6.1.4.1.2021.10.1.4"
 #define LOAD_ERRORFLAG_MIB   ".1.3.6.1.4.1.2021.10.1.100"
 #define LOAD_ERRORMSG_MIB    ".1.3.6.1.4.1.2021.10.1.101"
 
@@ -127,7 +129,6 @@ int main (int argc, char *argv[])
 static int report_load() {
 	int cnt;
 	long *errors;
-	void *pnt;
 	int i, j;
 	int nerrors = 0;
 	char **errormsg = NULL;
@@ -137,8 +138,8 @@ static int report_load() {
 		return STATE_UNKNOWN;
 	}
 
-	if (!cnt) {
-		printf("%s: Not configured.\n", bn);
+	if (cnt != 3) {
+		printf("%s: Invalid count for Index MIB (%d).\n", bn, cnt);
 		return STATE_WARNING;
 	}
 
@@ -147,8 +148,7 @@ static int report_load() {
 		return STATE_CRITICAL;
 	}
 
-	pnt = errors;
-	if (fetch_table(LOAD_ERRORFLAG_MIB, integer_callback, pnt, cnt) < 0) {
+	if (fetch_table(LOAD_ERRORFLAG_MIB, integer_callback, errors, cnt) < 0) {
 		printf("%s: Could not fetch error list!\n", bn);
 		return STATE_UNKNOWN;
 	}
@@ -164,7 +164,21 @@ static int report_load() {
 	}
 
 	if (nerrors == 0) {
-		printf("Checked load for %d entries.\n", cnt);
+		char **loadavg = calloc(sizeof(char **), cnt);
+		char **loadcfg = calloc(sizeof(char **), cnt);
+		if (!loadavg || !loadcfg) {
+			printf("%s: Could not allocate memory for loadavg\n", bn);
+			return STATE_CRITICAL;
+		}
+		if (fetch_table(LOAD_LOADAVG_MIB, string_callback, loadavg, cnt) < 0) {
+			printf("%s: Could not fetch current loadavg!\n", bn);
+			return STATE_UNKNOWN;
+		}
+		if (fetch_table(LOAD_CONFIG_MIB, string_callback, loadcfg, cnt) < 0) {
+			printf("%s: Could not fetch configured loadavg!\n", bn);
+			return STATE_UNKNOWN;
+		}
+		printf("Load OK: %s, %s, %s (max: %s, %s, %s).\n", loadavg[0], loadavg[1], loadavg[2], loadcfg[0], loadcfg[1], loadcfg[2]);
 		return STATE_OK;
 	}
 
@@ -174,8 +188,7 @@ static int report_load() {
 		return STATE_CRITICAL;
 	}
 
-	pnt = errormsg;
-	if (fetch_table(LOAD_ERRORMSG_MIB, string_callback, pnt, cnt) < 0) {
+	if (fetch_table(LOAD_ERRORMSG_MIB, string_callback, errormsg, cnt) < 0) {
 		printf("%s: Could not fetch error messages\n", bn);
 		return STATE_CRITICAL;
 	}
