@@ -8,20 +8,23 @@
 # 
 ########################################################################
 
-bin_PROGRAMS = check_snmp_disk check_snmp_proc check_snmp_swap
+bin_PROGRAMS = check_snmp_disk check_snmp_proc check_snmp_swap check_snmp_load
 
 SNMP_OBJ = snmp_common.o
 
 check_snmp_disk_LDADD = $(SNMP_OBJ)
 check_snmp_proc_LDADD = $(SNMP_OBJ)
 check_snmp_swap_LDADD = $(SNMP_OBJ)
+check_snmp_load_LDADD = $(SNMP_OBJ)
 
 check_snmp_disk_DEPENDENCIES = $(SNMP_OBJ)
 check_snmp_proc_DEPENDENCIES = $(SNMP_OBJ)
 check_snmp_swap_DEPENDENCIES = $(SNMP_OBJ)
+check_snmp_load_DEPENDENCIES = $(SNMP_OBJ)
 
 snmp_common.o: snmp_common.c snmp_common.h
 
 check_snmp_disk.o: check_snmp_disk.c snmp_common.h
 check_snmp_proc.o: check_snmp_proc.c snmp_common.h
 check_snmp_swap.o: check_snmp_swap.c snmp_common.h
+check_snmp_load.o: check_snmp_load.c snmp_common.h
