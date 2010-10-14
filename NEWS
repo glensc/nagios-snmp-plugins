@@ -1,3 +1,9 @@
+Version 1.3 -
+* New maintainer: Elan Ruusamäe
+* Added check_snmp_swap
+* Added check_snmp_load
+* Add -p in check_snmp_disk to output mountpoints instead of devices in -l mode
+
 Version 1.2 - Released 2008-01-27
 * Added patch to display disks and processes, 
   contributed by Mark Janssen
@@ -11,4 +17,3 @@ Version 1.0 - Released 2004-03-29
 * Added autoconf support
 
 Version 0.1 - Released 2002-01-27
-
