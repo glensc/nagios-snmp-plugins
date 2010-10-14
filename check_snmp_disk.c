@@ -40,6 +40,8 @@
 
 int report_disk(void);
 
+int path = 0;       // path mode (0 == default device mode)
+
 int main (int argc, char *argv[])
 {
   static struct option long_options[] = {
@@ -50,6 +52,7 @@ int main (int argc, char *argv[])
     { "hostname",  required_argument, 0, 'H' },
     { "verbose",   no_argument,       0, 'v' },
     { "list",      no_argument,       0, 'l' },
+    { "path",      no_argument,       0, 'p' },
     { 0, 0, 0, 0 },
   };
   int option_index = 0;
@@ -60,7 +63,7 @@ int main (int argc, char *argv[])
   bn = strdup(basename(argv[0]));
   version = VERSION;
 
-#define OPTS "?hVvlt:c:w:C:H:"
+#define OPTS "?hVvlpt:c:w:C:H:"
   
   while(1)
   {
@@ -118,8 +121,14 @@ int main (int argc, char *argv[])
 
       case 'l':
         listing = 1;
-		if(verbose)
-        	printf("%s: List mode activated\n", bn);
+        if(verbose)
+            printf("%s: List mode activated\n", bn);
+        break;
+
+      case 'p':
+        path = 1;
+        if(verbose)
+            printf("%s: Listing mount point activated\n", bn);
         break;
     }
   }
@@ -207,7 +216,7 @@ int report_disk()
 
   pnt = diskname;
 
-  if(fetch_table(DISK_DEVICE_MIB, string_callback, pnt, cnt) < 0)
+  if(fetch_table(path ? DISK_PATH_MIB : DISK_DEVICE_MIB, string_callback, pnt, cnt) < 0)
   {
     printf("%s: Could not fetch device list\n", bn);
     return STATE_CRITICAL;
@@ -221,22 +230,21 @@ int report_disk()
 
   if(gotErrors == 0)
   {
-	if(listing)
-	{
-		printf( "Checked %d disks (%s", cnt, diskname[0]);
-		for(i=1; i < cnt; i++)
-		{
-			printf( ", %s", diskname[i] );
-		}
-		printf(").\n" );
-	}
-	else
-    	printf("Checked %d disks.\n", cnt);
+    if(listing)
+    {
+      printf( "Checked %d disks (%s", cnt, diskname[0]);
+      for(i=1; i < cnt; i++)
+      {
+          printf( ", %s", diskname[i] );
+      }
+      printf(").\n" );
+    }
+    else
+      printf("Checked %d disks.\n", cnt);
     return STATE_OK;
   }
   
   return STATE_CRITICAL;
 }
 
-
-
+//Setup VIM: ex: et ts=2 sw=2 enc=utf-8 :
