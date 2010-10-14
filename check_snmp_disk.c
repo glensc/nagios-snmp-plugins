@@ -17,7 +17,7 @@
  *
  *************************************************************************
  *
- * Distributed under GPL.
+ * Distributed under GPL v2.
  *
  * $Id: disk_plugin.c,v 1.6 2002/01/27 22:10:24 henning Exp $
  *

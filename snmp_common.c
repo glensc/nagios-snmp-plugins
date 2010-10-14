@@ -14,7 +14,7 @@
  *
  *************************************************************************
  *
- * Distributed under GPL.
+ * Distributed under GPL v2.
  *
  * $Id: snmp_common.c,v 1.3 2002/01/27 15:31:50 henning Exp $
  *
