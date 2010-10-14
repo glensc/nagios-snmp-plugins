@@ -2,11 +2,6 @@
  *
  * plugins for Nagios
  *
- * (C) 2002-2008
- *   Henning P. Schmiedehausen
- *   INTERMETA - Gesellschaft fuer Mehrwertdienste mbH
- *   Hutweide 15
- *   D-91054 Buckenhof
  * (C) 2009
  *   Elan Ruusamäe, <glen@delfi.ee>
  *
