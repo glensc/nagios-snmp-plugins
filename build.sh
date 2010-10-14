@@ -1,10 +1,6 @@
-#! /bin/sh
+#!/bin/sh
 
-touch ChangeLog
-aclocal
-autoheader
-automake --add-missing
-autoconf
+set -e -x
+[ -x ./configure ] || ./autogen.sh
 ./configure
 make
-rm -f ChangeLog

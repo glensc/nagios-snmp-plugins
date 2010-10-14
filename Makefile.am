@@ -5,8 +5,10 @@
 #    INTERMETA - Gesellschaft fuer Mehrwertdienste mbH
 #    Hutweide 15
 #    D-91054 Buckenhof
-# 
+#
 ########################################################################
+
+AUTOMAKE_OPTIONS = 1.4 foreign
 
 bin_PROGRAMS = check_snmp_disk check_snmp_proc check_snmp_swap check_snmp_load
 
