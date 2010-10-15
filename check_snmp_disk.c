@@ -171,7 +171,7 @@ int report_disk()
   if(!cnt)  // No disks configured
   {
     printf("%s: No disks found.\n", bn);
-    return STATE_OK;
+    return STATE_WARNING;
   }
   
 
