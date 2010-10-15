@@ -14,6 +14,7 @@ AM_INIT_AUTOMAKE
 
 AM_CONFIG_HEADER(config.h)
 
+dnl same as nagios configure.in
 AC_PREFIX_DEFAULT(/usr/local/nagios)
 
 dnl Figure out how to invoke "install" and what install options to use.
@@ -73,4 +74,25 @@ if test "$with_snmp" != no; then
 fi
 
 AC_SUBST(LIB_SNMP)
-AC_OUTPUT(Makefile)
+
+dnl lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
+dnl Set exec_prefix, bindir, libdir, includedir to some sensible values
+# expand prefix and pass it to subsequent configures
+if test "x$prefix" = xNONE; then
+	prefix=${ac_default_prefix}
+	ac_configure_args="$ac_configure_args --prefix=${prefix}"
+fi
+# expand exec_prefix
+if test "x$exec_prefix" = xNONE; then
+	exec_prefix=${prefix}
+	ac_configure_args="$ac_configure_args --exec_prefix=${exec_prefix}"
+fi
+# expand bindir
+if test "x$bindir" = 'x${exec_prefix}/bin'; then
+	bindir="${exec_prefix}/bin"
+	ac_configure_args="$ac_configure_args --bindir=${bindir}"
+fi
+plugindir=$bindir
+AC_SUBST([plugindir], $plugindir)
+
+AC_OUTPUT([Makefile nagios-snmp-plugins.cfg])
