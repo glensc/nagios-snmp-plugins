@@ -13,7 +13,7 @@ AUTOMAKE_OPTIONS = 1.4 foreign
 bin_PROGRAMS = check_snmp_disk check_snmp_proc check_snmp_swap check_snmp_load
 
 config_DATA = nagios-snmp-plugins.cfg
-configdir = @sysconfdir@/plugins
+configdir = @sysconfdir@
 
 EXTRA_DIST = $(config_DATA)
 
