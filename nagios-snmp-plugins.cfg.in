@@ -1,0 +1,83 @@
+# 'proc' snmpd.conf directive
+define command {
+	command_name    check_snmp_disk
+	command_line    @plugindir@/check_snmp_disk -H $HOSTADDRESS$ -l -p $ARG1$
+}
+
+# 'proc' snmpd.conf directive
+define command {
+	command_name    check_snmp_proc
+	command_line    @plugindir@/check_snmp_proc -H $HOSTADDRESS$ -l $ARG1$
+}
+
+# 'swap' snmpd.conf directive
+define command {
+	command_name    check_snmp_swap
+	command_line    @plugindir@/check_snmp_swap -H $HOSTADDRESS$ $ARG1$
+}
+
+# 'load' snmpd.conf directive
+define command {
+	command_name    check_snmp_load
+	command_line    @plugindir@/check_snmp_load -H $HOSTADDRESS$ $ARG1$
+}
+
+define service {
+	name                    snmp_disk
+	use                     generic-service
+	service_description     disk
+	register                0
+
+	normal_check_interval   15
+	retry_check_interval    5
+	max_check_attempts      2
+
+	notification_interval   30
+
+	check_command           check_snmp_disk!-C public
+}
+
+define service {
+	name                    snmp_proc
+	use                     generic-service
+	service_description     proc
+	register                0
+
+	normal_check_interval   5
+	retry_check_interval    2
+	max_check_attempts      1
+
+	notification_interval   15
+
+	check_command           check_snmp_proc!-C public
+}
+
+define service {
+	name                    snmp_swap
+	use                     generic-service
+	service_description     swap
+	register                0
+
+	normal_check_interval   30
+	retry_check_interval    10
+	max_check_attempts      2
+
+	notification_interval   30
+
+	check_command           check_snmp_swap!-C public
+}
+
+define service {
+	name                    snmp_load
+	use                     generic-service
+	service_description     load average
+	register                0
+
+	normal_check_interval   5
+	retry_check_interval    1
+	max_check_attempts      3
+
+	notification_interval   15
+
+	check_command           check_snmp_load!-C public
+}
