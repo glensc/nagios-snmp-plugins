@@ -95,4 +95,4 @@ fi
 plugindir=$bindir
 AC_SUBST([plugindir], $plugindir)
 
-AC_OUTPUT([Makefile nagios-snmp-plugins.cfg])
+AC_OUTPUT([Makefile nagios-snmp-plugins.cfg nagios-snmp-plugins.spec])
