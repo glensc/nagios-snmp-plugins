@@ -20,3 +20,5 @@ missing
 nagios-snmp-plugins.cfg
 stamp-h1
 nagios-snmp-plugins-*.tar.gz
+nagios-snmp-plugins-*.rpm
+nagios-snmp-plugins.spec
