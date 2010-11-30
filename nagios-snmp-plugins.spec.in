@@ -1,4 +1,4 @@
-Summary:	Plugins for Nagios to monitor remote disk and processes via SNMP
+Summary:	Plugins for Nagios to monitor remote resources via SNMP
 Name: 		nagios-snmp-plugins
 Version:	@VERSION@
 Release:	1%{?dist}
@@ -15,8 +15,11 @@ BuildRoot: 	%{_tmppath}/%{name}-root
 %define		plugindir	%{_libdir}/nagios/plugins
 
 %description
-These plugins allow you to monitor disk space and running processes on
-a remote machine via SNMP.
+These plugins allow you to monitor on a remote machine via SNMP:
+- disk space
+- running processes
+- system load
+- swap usage
 
 %prep
 %setup -q
