@@ -1,22 +1,18 @@
-
-%define nagios_plugins_dir %{_libdir}/nagios/plugins
-
+Summary:	Plugins for Nagios to monitor remote disk and processes via SNMP
 Name: 		nagios-snmp-plugins
-Summary: 	Plugins for Nagios to monitor remote disk and processes via SNMP
 Version:	1.2
-Release:	1%{?dist}.im
-Source: 	http://www.softwareforge.de/releases/nagios-snmp-plugins/nagios-snmp-plugins-%{version}.tar.gz
-License: 	GPLv2
-BuildRoot: 	%{_tmppath}/%{name}-root
-Group: 		Applications/System
-Packager: 	Henning P. Schmiedehausen <henning@intermeta.de>
-Distribution: 	INTERMETA RPMs
-Vendor: 	INTERMETA - Gesellschaft fuer Mehrwertdienste mbH
-
-BuildRequires:  autoconf, automake
+Release:	1%{?dist}
+License:	GPL v2
+Group:		Networking
+Source0: 	http://www.softwareforge.de/releases/nagios-snmp-plugins/nagios-snmp-plugins-%{version}.tar.gz
+BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:  net-snmp-devel
-BuildRequires:  openssl-devel
 Requires:       nagios-plugins
+BuildRoot: 	%{_tmppath}/%{name}-root
+
+%define		_sysconfdir	/etc/nagios/plugins
+%define		plugindir	%{_libdir}/nagios/plugins
 
 %description
 These plugins allow you to monitor disk space and running processes on
@@ -26,26 +22,23 @@ a remote machine via SNMP.
 %setup -q
 
 %build
-./build.sh
+%configure \
+	--bindir=%{plugindir}
+%{__make}
 
 %install
-rm -rf %{buildroot}
-
-mkdir -p %{buildroot}%{nagios_plugins_dir}
-
-install check_snmp_disk %{buildroot}%{nagios_plugins_dir}
-install check_snmp_proc %{buildroot}%{nagios_plugins_dir}
+rm -rf $RPM_BUILD_ROOT
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 
 %clean
 rm -rf %{buildroot}
 
 %files
-%defattr(-,root,root)
-
-%doc README COPYING AUTHORS NEWS
-
-%attr(755,root,root) %{nagios_plugins_dir}/check_snmp_disk
-%attr(755,root,root) %{nagios_plugins_dir}/check_snmp_proc
+%defattr(644,root,root,755)
+%doc AUTHORS NEWS README
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}.cfg
+%attr(755,root,root) %{plugindir}/*
 
 %changelog
 * Sun Jan 27 2008 Henning P. Schmiedehausen <hps@intermeta.de> - 1.2-1.im
