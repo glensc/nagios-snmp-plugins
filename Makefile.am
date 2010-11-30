@@ -15,7 +15,7 @@ bin_PROGRAMS = check_snmp_disk check_snmp_proc check_snmp_swap check_snmp_load
 config_DATA = nagios-snmp-plugins.cfg
 configdir = @sysconfdir@
 
-EXTRA_DIST = $(config_DATA)
+EXTRA_DIST = $(config_DATA) snmp_common.h snmp_common.c
 
 SNMP_OBJ = snmp_common.o
 
