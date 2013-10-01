@@ -224,14 +224,14 @@ int report_disk()
     return STATE_CRITICAL;
   }
 
-  for(i=0; i < cnt; i++)
-  {
-    if(errors[i])
-      printf("%s (%s)\n", errormsg[i], diskname[i]);
-  }
-
-  if(gotErrors == 0)
-  {
+  if(gotErrors == 1) {
+    for(i=0; i < cnt; i++)
+    {
+      if(errors[i])
+        printf("%s (%s); ", errormsg[i], diskname[i]);
+    }
+    printf("\n");
+  } else {
     if(listing)
     {
       printf( "Checked %d disks (%s", cnt, diskname[0]);
@@ -241,8 +241,9 @@ int report_disk()
       }
       printf(").\n" );
     }
-    else
+    else {
       printf("Checked %d disks.\n", cnt);
+    }
     return STATE_OK;
   }
   
