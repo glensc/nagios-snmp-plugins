@@ -5,10 +5,12 @@ dnl #    Henning P. Schmiedehausen
 dnl #    INTERMETA - Gesellschaft fuer Mehrwertdienste mbH
 dnl #    Hutweide 15
 dnl #    D-91054 Buckenhof
+dnl #  (C) 2010-2013
+dnl #    Elan Ruusamäe, <glen@delfi.ee>
 dnl #
 dnl ########################################################################
 
-AC_INIT([nagios-snmp-plugins], 1.3)
+AC_INIT([nagios-snmp-plugins], 1.3.1)
 AC_CONFIG_SRCDIR([check_snmp_disk.c])
 AM_INIT_AUTOMAKE
 
