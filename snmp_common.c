@@ -7,6 +7,8 @@
  *   INTERMETA - Gesellschaft fuer Mehrwertdienste mbH
  *   Hutweide 15
  *   D-91054 Buckenhof
+ * (C) 2010-2013
+ *   Elan Ruusamäe, <glen@delfi.ee>
  *
  *************************************************************************
  *
@@ -48,6 +50,9 @@ void print_help()
   printf("-C, --community <name>:      Set SNMP community (required)\n");
   printf("-H, --hostname <name>:       Set Hostname to scan (required)\n");
   printf("-v, --verbose:               Increase verbosity (for testing)\n");
+  printf("\nFor check_snmp_disk also applies:\n");
+  printf("-l, --list                   List checked partitions\n");
+  printf("-p, --path                   Show mount points instead of of devices in list mode\n");
 }
 
 /**

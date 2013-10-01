@@ -7,7 +7,7 @@
  *   INTERMETA - Gesellschaft fuer Mehrwertdienste mbH
  *   Hutweide 15
  *   D-91054 Buckenhof
- * (C) 2010
+ * (C) 2010-2013
  *   Elan Ruusamäe, <glen@delfi.ee>
  *
  *************************************************************************
