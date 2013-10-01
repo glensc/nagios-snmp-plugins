@@ -18,14 +18,9 @@ Who wrote it?
 -------------
 
 These programs are (C) 2002-2008 by
-
 Henning P. Schmiedehausen
-INTERMETA - Gesellschaft fuer Mehrwertdienste mbH
-Hutweide 15
-D-91054 Buckenhof
 
-Mail:  hps@intermeta.de
-Web:   http://www.intermeta.de/
+(C) 2010-2013 Elan Ruusamäe <glen@delfi.ee>
 
 Distributed under GNU GENERAL PUBLIC LICENSE v2 
 (See file COPYING in the distribution).
@@ -34,13 +29,8 @@ Distributed under GNU GENERAL PUBLIC LICENSE v2
 Where to get it?
 ----------------
 
-Homepage: http://henning.schmiedehausen.org/eyewiki/Wiki.jsp?page=NagiosSnmpPlugins
-
-Release downloads: http://www.softwareforge.de/releases/nagios-snmp-plugins/
-
-SVN Browser: https://svn.softwareforge.de/trac/browser/nagios-snmp-plugins/trunk
-Anon SVN:    http://svn.softwareforge.de/svn/opensource/nagios-snmp-plugins/trunk
-
+Homepage: https://github.com/glensc/nagios-snmp-plugins
+Release downloads: https://github.com/glensc/nagios-snmp-plugins/releases
 
 Acknowlegdements & Thanks
 -------------------------
@@ -61,6 +51,8 @@ Oliver Faenger <oliver.faenger at cityweb.de>
 Mark Janssen <maniac at maniac.nl>
    - patch that displays the checked devices and processes
 
+Henning P. Schmiedehausen
+   - original code author
 
 
 All the Linux distributions who included that little hack into their
