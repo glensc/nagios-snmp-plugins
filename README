@@ -1,4 +1,3 @@
-
 			 Nagios SNMP Plugins
 			 ===================
 
@@ -12,7 +11,7 @@ new version.
 
 Nagios:   	http://www.nagios.org/
 Net-SNMPD: 	http://www.net-snmp.org/
-
+Travis-CI Build Status: https://travis-ci.org/glensc/nagios-snmp-plugins
 
 Who wrote it?
 -------------
